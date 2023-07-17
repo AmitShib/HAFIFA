@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mongodb": "^5.7.0",
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^7.3.4",
+    "mongosh": "^1.10.1"
+  }
+}
