@@ -20,8 +20,6 @@ async function loadTextFileToCollection() {
     // Read the text file and parse its content into an array of documents
     const textFilePath = "C:/Users/Noa Dunitza/Desktop/MongoDB/people_example.txt"; // Replace with the path to your text file
     const data = fs.readFileSync(textFilePath, "utf8");
-   // const documents = data.split("\n").map((line) => JSON.parse(line));
-   //const documents = data.split("\n").filter(line => line.trim() !== "");
     
 
     // Create the new collection and insert the data
