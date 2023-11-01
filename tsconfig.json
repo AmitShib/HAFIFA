@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "./TypeScript/dist",
     "rootDir": "./TypeScript/src",
-    "strict": true
+    "strict": true,
+    "sourceMap": true
   },
   "include": ["TypeScript/src/**/*.ts"],
   "exclude": ["node_modules"]
