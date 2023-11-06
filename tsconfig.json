@@ -5,7 +5,8 @@
     "outDir": "./TypeScript/dist",
     "rootDir": "./TypeScript/src",
     "strict": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true
   },
   "include": ["TypeScript/src/**/*.ts"],
   "exclude": ["node_modules"]

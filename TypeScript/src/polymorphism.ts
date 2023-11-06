@@ -65,6 +65,7 @@ class VideoLibrary<T extends { name: string, URL: string }> {
         return this.legalVideos.some(video => video.name === name);
     }
 
+    @measurePerformance
     public addVideo(video: T): T[] {
         if (!this.videoExists(video.name)) {
             this.legalVideos.push(video);
@@ -79,7 +80,8 @@ class VideoLibrary<T extends { name: string, URL: string }> {
     deleteVideoByName(videoName: string): void {
         this.legalVideos = this.legalVideos.filter(video => video.name !== videoName);
     }
-
+    
+    @logArgumentsAndResult
     getPlaylist(): string[] {
         return this.legalVideos.map(video => video.URL);
     }
