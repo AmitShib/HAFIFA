@@ -1,25 +1,21 @@
 
-let arr: (Date | number)[] = [new Date(), 123, new Date(), 456];
+const arr: (Date | number)[] = [new Date(), 123, new Date(), 456];
 
-let isoDatesArray: string[] = arr.map((element: Date | number) => {
-    if (element instanceof Date) {
-        return element.toISOString(); // Convert Date to ISO string
-    } else {
-        return element.toString(); // Convert number to string
-    }
-});
+const isDate = (e: any) : e is Date  => e instanceof Date
+// make is Date a typeguard to fix error == DONE
+const isoDatesArray: string[] = arr.map((e: Date | number) => isDate(e) ? e.toISOString() : e.toString());
 
 console.log(isoDatesArray);
 
 enum Dogs {
     golden = "golden retriever",
-    poodle = "poodle", 
+    poodle = "poodle",
     labrador = "labrador"
-  }
+}
 
-  type Fish = 'salmon' | 'cod' | 'gold fish';
+type Fish = 'salmon' | 'cod' | 'gold fish';
 
-  type MyObject = {
+type MyObject = {
     [key: string]: Fish;
 };
 

@@ -8,7 +8,8 @@ function getRandomVideo(): Video | null {
         return null; // Return null with a 50% chance
     } else {
         // Return a video object with the remaining 50% chance
-        const video: Video = {   
+        const video: Video = {
+            // math.random should be in function, also math.floor   
             name: "Random Video " + Math.floor(Math.random() * 100), // Random name
             URL: "https://example.com/randomVideo" + Math.floor(Math.random() * 100), // Random URL
             description: Math.random() < 0.5 ? "Description " + Math.floor(Math.random() * 100) : undefined, // Random description (optional)

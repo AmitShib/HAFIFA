@@ -1,38 +1,28 @@
+// Let matan check
 
-function checkLen(str: string): string | null {
-    if(str.length%2 == 0)
-    {
-        const halfLength = Math.floor(str.length / 2);
-        const firstHalf = str.slice(0, halfLength);
-        return firstHalf;
-    }
-    return null;
-}
 
-let result: string | null = checkLen('validi');
-console.log(result); 
+const isEven = (str:string) => str.length % 2;
+const halfLenString = (str:string) => Math.floor(str.length / 2);
+const halfString = (str:string) => str.slice(0, halfLenString(str));
+const evenLenBringHalfSrtring = (str: string): string | null => isEven(str) ? halfString(str) : null;
 
-type MyUnionType = string | null;
 
-function checkExist(str: MyUnionType): MyUnionType {
-    if (str === null) {
-        return ''; // Return empty string for null
-    } else {
-        return str + str; // Return the string
-    }
-}
+const result: string | null = evenLenBringHalfSrtring('validi');
+console.log(result);
 
-let result1: MyUnionType = checkExist('null');
-console.log(result1); 
+type UnionType = string | null;
 
-function getFirstObject<T>(arr: T[]): T | null {
-    return arr.length > 0 ? arr[0] : null;
-}
+const duplicateString = (str:string) => str+str ;
+const checkExist =(str: UnionType): UnionType => str ? duplicateString(str) : '' ;
 
-let arrayOfStrings: string[] = ['apple', 'banana', 'orange'];
+const result1: UnionType = checkExist('null');
+console.log(result1);
+
+const getFirstObject = <T>(arr: T[]): T | null => arr.length ? arr[0] : null;
+
+
+const arrayOfStrings: string[] = ['apple', 'banana', 'orange'];
 console.log(getFirstObject(arrayOfStrings));
 
-function isMyUnion(value: any): value is MyUnionType {
-    return (typeof value === 'string');
-}
+const isMyUnion = (value: any): value is UnionType => typeof value === 'string';
 

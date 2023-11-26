@@ -3,14 +3,14 @@ export interface Video {
     URL: string;
     description?: string;
     date: Date;
-  }
+}
 
-  function createVideo(name: string, URL: string, date: Date, description?: string): Video {
+function createVideo(name: string, URL: string, date: Date, description?: string): Video {
     return {
-        name: name,
-        URL: URL,
-        description: description,
-        date: date
+        name,
+        URL,
+        description,
+        date
     };
 }
 
@@ -19,43 +19,34 @@ type VideoWithDescription = {
     description: string;
 };
 
-type VideosWithDescription = Video & VideoWithDescription;
+type FullVideo = Video & VideoWithDescription;
 
 
 // Example usage:
 const newVideo: Video = createVideo('Sample Video', 'http://example.com/sample', new Date(), 'This is a sample video');
 console.log(newVideo);
 
-//abstract class
-// abstract class VideoLibaries{
-//     videos : Video[];
-//     constructor() {
-//         this.videos = [];
-//     }
-//      abstract addVideo(video:Video):Video[];
-
-//      getPlaylist(): string[] {
-//         return this.videos.map(video => video.URL);
-//     }
-// }
-
 //CLASS 1
 
-export class IllegalVideoLibrary<T extends { name: string, URL: string }> {
-    illegalVideos: T[];
+interface halfVideo {
+    name :string,
+    URL: string
+} 
+export class IllegalVideoLibrary<video extends halfVideo> {
+    illegalVideos: video[];
 
     constructor() {
         this.illegalVideos = [];
     }
 
-    public addVideo(video: T): T[] {
+    public addVideo(video: video): video[] {
         this.illegalVideos.push(video);
         return this.illegalVideos;
     }
 }
 
-class VideoLibrary<T extends { name: string, URL: string }> {
-    legalVideos: T[];
+class VideoLibrary<video extends halfVideo> {
+    legalVideos: video[];
 
     constructor() {
         this.legalVideos = [];
@@ -66,12 +57,12 @@ class VideoLibrary<T extends { name: string, URL: string }> {
     }
 
     @measurePerformance
-    public addVideo(video: T): T[] {
+    public addVideo(video: video): video[] {
         if (!this.videoExists(video.name)) {
             this.legalVideos.push(video);
             return this.legalVideos;
         } else {
-            const existsVideos = new IllegalVideoLibrary<T>();
+            const existsVideos = new IllegalVideoLibrary<video>();
             existsVideos.addVideo(video);
             return existsVideos.illegalVideos;
         }

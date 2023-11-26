@@ -1,12 +1,12 @@
-type PersonalNumber  = `${string}@idf.ts`;
+type PersonalNumber = `${string}@idf.ts`;
 
-const validString1: PersonalNumber  = 'example@idf.ts';
+const validString1: PersonalNumber = 'example@idf.ts';
 
 console.log(validString1);
 
 type DayOfWeek = 'sunday' | 'monday' | 'tuesday';
 
-type Weather  = 'snowy' | 'rainy' | 'cloudy' | 'sunny';
+type Weather = 'snowy' | 'rainy' | 'cloudy' | 'sunny';
 
 type DayWeatherCombo = `${DayOfWeek} ${Weather}`;
 
@@ -22,9 +22,9 @@ type OnlyFunctionsOf<Obj extends {}> = {
 }[keyof Obj];
 
 type MyInterFace = {
-    firstName : string; 
-    greet :()=> string;
+    firstName: string;
+    greet: () => string;
 };
 
 type OnlyFunctionsOfMyInterFace = OnlyFunctionsOf<MyInterFace>;
-const try2 : OnlyFunctionsOfMyInterFace = "greet";
+const try2: OnlyFunctionsOfMyInterFace = "greet";
