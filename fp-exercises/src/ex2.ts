@@ -22,22 +22,22 @@ interface User {
 
 export const getByName = (name: string, users: User[]): User[] =>users.filter(elem =>elem.name==name);
 
+const isSameName = (name :string , nameToCheck : string) => name === nameToCheck;
+const updateScore = (user : User , points : number) => user.score += points;
 
-export const addPointsToScoreByName = (points: number, name: string, users: User[]): User[] =>{
-    return users.map(user => {
-        if (user.name === name) {
-          return { ...user, score: user.score + points };
-        }
-        return user;
-      });
-    // var newArr:User[]=getByName(name,users);
-    // for(var i=0;i=newArr.length;i++)
-    // {
-    //     newArr[i].score= newArr[i].score+points;
-    // }
-    // return newArr;
-};
+export const addPointsToScoreByName = (points: number, name: string, users: User[]): User[] => users.map(user => (isSameName(prop('name', user), name) ? updateScore(user, points) : user) as User);
 
+// export const addPointsToScoreByName = (points: number, name: string, users: User[]): User[] =>
+// {
+//     return users.map(user => {
+//         if (user.name === name) {
+//           return { ...user, score: user.score + points };
+//         }
+//         return user;
+//       });
+// };
+
+/*  I STOPPED HERE */
 
 export const incrementTriesByName = (name: string, users: User[]): User[] =>{
     return users.map(user => {
