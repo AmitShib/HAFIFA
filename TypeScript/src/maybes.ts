@@ -1,32 +1,20 @@
 import { Video } from "./polymorphism";
 
-function getRandomVideo(): Video | null {
-    const random = Math.random();
+const getRandom = (num : number = 1) => Math.random() * num;
+const floorTheNum = (num : number) => Math.floor(num); //meagel at hamispar 
+const makeVideo = () : Video => {
+    const video: Video = {
+        // math.random should be in function, also math.floor   
+        name: "Random Video " + floorTheNum(getRandom(100)), // Random name
+        URL: "https://example.com/randomVideo" + floorTheNum(getRandom(100)), // Random URL
+        description: getRandom() < 0.5 ? "Description " + floorTheNum(getRandom(100)) : undefined, // Random description (optional)
+        date: new Date(floorTheNum(getRandom() * Date.now())), // Random date
+    };
+    return video;
+} ;
 
-    // Probability distribution for null and video object (adjust as needed)
-    if (random < 0.5) {
-        return null; // Return null with a 50% chance
-    } else {
-        // Return a video object with the remaining 50% chance
-        const video: Video = {
-            // math.random should be in function, also math.floor   
-            name: "Random Video " + Math.floor(Math.random() * 100), // Random name
-            URL: "https://example.com/randomVideo" + Math.floor(Math.random() * 100), // Random URL
-            description: Math.random() < 0.5 ? "Description " + Math.floor(Math.random() * 100) : undefined, // Random description (optional)
-            date: new Date(Math.floor(Math.random() * Date.now())), // Random date
-        };
-        return video;
-    }
-}
-
-// Example usage
-// const randomItem = getRandomVideo();
-// if (randomItem === null) {
-//     console.log("Received null");
-// } else {
-//     console.log("Received video:", randomItem);
-// }
-
+const getRandomVideo = () => (getRandom()< 0.5) ? null : makeVideo();
+ 
 // Create an array filled with random Video objects or null
 const videoArray: (Video | null)[] = Array.from({ length: 10 }, getRandomVideo);
 
@@ -34,9 +22,11 @@ const videoArray: (Video | null)[] = Array.from({ length: 10 }, getRandomVideo);
 console.log(videoArray);
 
 // Map the array to retrieve descriptions or empty strings if the description is null or undefined
-const descriptions: string[] = videoArray.map((videoOrNull) => {
-    return videoOrNull?.description ?? ''; // Using optional chaining and nullish coalescing
-});
+// const descriptions: string[] = videoArray.map((videoOrNull) => {
+//     return videoOrNull?.description ?? ''; // Using optional chaining and nullish coalescing
+// });
+
+const descriptions = (videoArr : (Video | null)[]) : string[] => videoArr===null ? [] : (videoArr.map((video) => video?.description || ''));
 
 // Display the resulting array of descriptions
-console.log(descriptions);
+console.log(descriptions(videoArray));
