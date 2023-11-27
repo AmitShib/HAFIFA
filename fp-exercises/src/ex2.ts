@@ -37,31 +37,33 @@ export const addPointsToScoreByName = (points: number, name: string, users: User
 //       });
 // };
 
-/*  I STOPPED HERE */
+const updateTries = (user : User) => user.tries++;
 
-export const incrementTriesByName = (name: string, users: User[]): User[] =>{
-    return users.map(user => {
-        if (user.name === name) {
-          return { ...user, score: user.score ++  };
-        }
-        return user;
-      });
-    // var newArr:User[]=getByName(name,users);
-    // for(var i=0;i=newArr.length;i++)
-    // {
-    //     newArr[i].tries= newArr[i].tries++;
-    // }
-    // return newArr;
-};
+export const incrementTriesByName = (name: string, users: User[]): User[] =>users.map(user => (isSameName(prop('name', user), name) ? updateTries(user) : user) as User);
+
+// export const incrementTriesByName = (name: string, users: User[]): User[] =>{
+//     return users.map(user => {
+//         if (user.name === name) {
+//           return { ...user, score: user.score ++  };
+//         }
+//         return user;
+//       });
+// };
 
 
-export const updateUsersTriesAndScore = (name: string, points: number, users: User[]): User[] =>
-{
-    var newArr:User[] =users;
-    newArr = addPointsToScoreByName(points,name,newArr);
-    newArr = incrementTriesByName(name,users);
-    return newArr;
-};
+export const updateUsersTriesAndScore = (name: string, points: number, users: User[]): User[] =>{
+    addPointsToScoreByName(points , name , users);
+    incrementTriesByName(name,users);
+    return users;
+    };
+
+// export const updateUsersTriesAndScore = (name: string, points: number, users: User[]): User[] =>
+// {
+//     var newArr:User[] =users;
+//     newArr = addPointsToScoreByName(points,name,newArr);
+//     newArr = incrementTriesByName(name,users);
+//     return newArr;
+// };
 
 
 interface UserWithPassing extends User {
@@ -70,19 +72,12 @@ interface UserWithPassing extends User {
 
 
 // write a function that adds each user a new property ('passing'), which is equal to true if and only if the user's score >= 60
-export const addPassingBooleanProperty = (usersArray: User[]): UserWithPassing[] => {
-    return usersArray.map(user => ({
-        ...user,
-        passing: user.score >= 60
-      }));
-};
+export const addPassingBooleanProperty = (usersArray: User[]): UserWithPassing[] => usersArray.map(user => ({...user,passing: user.score >= 60}));
 
 
-export const getHighestScore = (users: User[]): number =>
-{
-    var scoreArr:number[]= users.map(elem=>elem.score);
-    return Math.max(...scoreArr);
-};
+const getMaxElem = (arr : number[]) : number => Math.max(...arr);
+export const getHighestScore = (users: User[]): number => getMaxElem(users.map(elem=>elem.score));
+    
 
 
-export const sortByTriesDescendingOrder = (users: User[]): User[] =>users.slice().sort((a, b) => b.tries - a.tries); ;
+export const sortByTriesDescendingOrder = (users: User[]): User[] =>users.slice().sort((a, b) => b.tries - a.tries);
