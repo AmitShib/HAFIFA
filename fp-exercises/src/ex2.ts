@@ -1,4 +1,4 @@
-import { prop } from 'ramda';
+import { add, apply, assoc, descend, filter, inc, lensProp, map, over, pipe, pluck, prop, propEq, sort, when } from 'ramda';
 
 interface User {
     name: string;
@@ -20,50 +20,28 @@ interface User {
 */
 
 
-export const getByName = (name: string, users: User[]): User[] =>users.filter(elem =>elem.name==name);
+export const getByName = (name: string) => filter(propEq(name, "name"));
 
-const isSameName = (name :string , nameToCheck : string) => name === nameToCheck;
-const updateScore = (user : User , points : number) => user.score += points;
+// const updateScore = (points: number) => (user: User): User => ({ ...user, score: user.score + points });
+const updateScore = (points: number) => over<User, number>(lensProp("score"), add(points));
 
-export const addPointsToScoreByName = (points: number, name: string, users: User[]): User[] => users.map(user => (isSameName(prop('name', user), name) ? updateScore(user, points) : user) as User);
+const whenNameEqThen = (func: (user: User) => User) => (name: string) => when(propEq(name, "name"), func);
+const whenNameEqAddPoints = (points: number) => whenNameEqThen(updateScore(points));
 
-// export const addPointsToScoreByName = (points: number, name: string, users: User[]): User[] =>
-// {
-//     return users.map(user => {
-//         if (user.name === name) {
-//           return { ...user, score: user.score + points };
-//         }
-//         return user;
-//       });
-// };
-
-const updateTries = (user : User) => user.tries++;
-
-export const incrementTriesByName = (name: string, users: User[]): User[] =>users.map(user => (isSameName(prop('name', user), name) ? updateTries(user) : user) as User);
-
-// export const incrementTriesByName = (name: string, users: User[]): User[] =>{
-//     return users.map(user => {
-//         if (user.name === name) {
-//           return { ...user, score: user.score ++  };
-//         }
-//         return user;
-//       });
-// };
+export const addPointsToScoreByName = (points: number, name: string) => map(whenNameEqAddPoints(points)(name));
+const incrementTries = over<User, number>(lensProp("score"), inc);
+const whenNameEqIncrementTries = whenNameEqThen(incrementTries);
 
 
-export const updateUsersTriesAndScore = (name: string, points: number, users: User[]): User[] =>{
-    addPointsToScoreByName(points , name , users);
-    incrementTriesByName(name,users);
-    return users;
-    };
+export const incrementTriesByName = (name: string) => map(whenNameEqIncrementTries(name));
 
-// export const updateUsersTriesAndScore = (name: string, points: number, users: User[]): User[] =>
-// {
-//     var newArr:User[] =users;
-//     newArr = addPointsToScoreByName(points,name,newArr);
-//     newArr = incrementTriesByName(name,users);
-//     return newArr;
-// };
+
+
+
+export const updateUsersTriesAndScore = (name: string, points: number) => pipe(
+    addPointsToScoreByName(points,name),
+    incrementTriesByName(name)
+);
 
 
 interface UserWithPassing extends User {
@@ -72,12 +50,15 @@ interface UserWithPassing extends User {
 
 
 // write a function that adds each user a new property ('passing'), which is equal to true if and only if the user's score >= 60
-export const addPassingBooleanProperty = (usersArray: User[]): UserWithPassing[] => usersArray.map(user => ({...user,passing: user.score >= 60}));
+export const addPassingBooleanProperty = map<User, UserWithPassing>(user => assoc("passing", user.score>=60, user));
 
 
-const getMaxElem = (arr : number[]) : number => Math.max(...arr);
-export const getHighestScore = (users: User[]): number => getMaxElem(users.map(elem=>elem.score));
-    
+const getMaxElem = apply(Math.max);
+export const getHighestScore = pipe(
+    pluck("score")<User>,
+    getMaxElem
+);
 
 
-export const sortByTriesDescendingOrder = (users: User[]): User[] =>users.slice().sort((a, b) => b.tries - a.tries);
+
+export const sortByTriesDescendingOrder = sort<User>(descend(prop("tries")));
