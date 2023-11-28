@@ -28,27 +28,6 @@ const maxValue = (str, col) => {...};
 Which, given two string str and col consisting of N and M characters, respectively,
 returns the maximum value in column col of the table described by str.
 */
-import { pipe, map, filter, identity } from 'ramda';
-
-const splitStrToRows = (str :string) : string[] => str.split('\n');
-
-const getColIndex = (row :string , col : string) : number => row.split(',').indexOf(col); //get the col index-- need to bring the first row after the split
-
-const getRowFields = (row :string) : string[] => row.split(',');
-
-const getColValue = (row : string, colIndx : number) : string => getRowFields(row)[colIndx];
-
-const strArrToNumArr = (colValues : string[]) : number[] => colValues.map(value => (value !== null ? Number(value) : null)).filter(value => value !== null) as number[];;
-
-
-export const makeArr1 = (str: string, col: string): number[] => {
-    const rows = splitStrToRows(str);
-    const colIndex = getColIndex(rows[0], col);
-    const colValues = rows.map(row => getColValue(row , colIndex));
-    const finalArr = strArrToNumArr(colValues);
-    return finalArr;
-  };
-
 
   
 // const makeArr = (str: string, col: string): number[] => {
@@ -75,25 +54,14 @@ export const makeArr1 = (str: string, col: string): number[] => {
 //     return valuesInCol.filter(value => value !== null) as number[];
 //   };
 
-  const makeArr = (str: string, col: string): number[] => {
-    const rows = splitStrToRows(str); // Use splitStrToRows instead of str.split('\n')
-    const colIndex = getColIndex(rows[0], col); // Use getColIndex with the first row
-    if (colIndex === -1) {
-      // Column not found
-      throw new Error(`Column "${col}" not found in the table.`);
-    }
-  
-    const valuesInCol = rows.slice(1).map(row => {
-      const colValue = getColValue(row, colIndex); // Use getColValue
-      if (isNaN(Number(colValue))) {
-        // Skip non-numeric values
-        return null;
-      }
-  
-      return Number(colValue);
-    });
-  
-    return valuesInCol.filter(value => value !== null) as number[];
-  };
-  
-  export const maxValue = (str: string, col: string) => Math.max(...makeArr(str,col)); 
+const splitStrToRows = (str: string): string[] => str.split('\n');
+const getColIndex = (row: string, col: string): number => row.split(',').indexOf(col); //get the col index-- need to bring the first row after the split
+const getRowFields = (row: string): string[] => row.split(',');
+const getColValue = (row: string, colIndex: number): string => getRowFields(row)[colIndex];
+const toNumber = (value: string): number => Number(value);
+const isValidNumber = (value: number): boolean => !isNaN(value);
+const makeArr = (str: string, col: string): number[] => splitStrToRows(str).slice(1).map(row =>
+  toNumber(getColValue(row, getColIndex(splitStrToRows(str)[0], col)))
+).filter(isValidNumber);
+
+export const maxValue = (str: string, col: string): number => Math.max(...makeArr(str,col));
