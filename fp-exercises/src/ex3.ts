@@ -54,14 +54,28 @@ returns the maximum value in column col of the table described by str.
 //     return valuesInCol.filter(value => value !== null) as number[];
 //   };
 
-const splitStrToRows = (str: string): string[] => str.split('\n');
-const getColIndex = (row: string, col: string): number => row.split(',').indexOf(col); //get the col index-- need to bring the first row after the split
-const getRowFields = (row: string): string[] => row.split(',');
-const getColValue = (row: string, colIndex: number): string => getRowFields(row)[colIndex];
+import { indexOf, nth, pipe, slice, split } from "ramda";
+
+const splitStrToRows = split('\n');
+const getColIndex = (row: string, col: string): number => row.split(',').indexOf(col);
+// const getColIndex = (col: string)=> pipe(
+//   getRowFields,
+//   indexOf(col)
+// );
+const getRowFields = split(',');
+const getColValue = (row: string, colIndex: number) => getRowFields(row)[colIndex];
+// const getColValue = (colIndex: number) => pipe(
+//   getRowFields,
+//   nth(colIndex)
+// );
+
+// const toNumber = Number();
 const toNumber = (value: string): number => Number(value);
-const isValidNumber = (value: number): boolean => !isNaN(value);
+const isValidNumber = (value: number) => !isNaN(value);
+
 const makeArr = (str: string, col: string): number[] => splitStrToRows(str).slice(1).map(row =>
   toNumber(getColValue(row, getColIndex(splitStrToRows(str)[0], col)))
 ).filter(isValidNumber);
+
 
 export const maxValue = (str: string, col: string): number => Math.max(...makeArr(str,col));
