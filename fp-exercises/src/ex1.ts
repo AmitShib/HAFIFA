@@ -12,15 +12,16 @@ export const boostSingleScores = map(when(isBelowTen, multByTen));
 // write a function that gets an array of scores returns the second largest value.
 // const maxElem = (arr:number[]):number => Math.max(...arr);
 // export const secondMaximum =(arr:number[]):number=>Math.max(...arr.filter(elem=>(elem<maxElem(arr))));
-const sortNumArr = sort<number>((a, b) => b - a);
+const sortDesc = sort<number>((a, b) => b - a);
 // const sortArr = sort(flip(subtract));
 export const secondMaximum = pipe(
-    sortNumArr,
+    sortDesc,
     uniq,
-    ifElse(pipe(
-        nth(1), isNil
-    ),
-        nth(0), nth(1))
+    ifElse(
+        pipe(nth(1), isNil),
+        nth(0),
+        nth(1)
+    )
 );
 //export const secondMaximum = (arr: number[]): number => sortNumArr(arr)[1];
 
@@ -31,7 +32,7 @@ const isDivider = curry(pipe(
 ));
 
 
-export const getDividers = (num: number): number[] => range(1, num + 1).filter(isDivider(num));
+export const getDividers = (num: number): number[] => range(1, num).filter(isDivider(num));
 
 
 // write a function that gets a number and returns true if the number is prime, or else returns false
@@ -39,5 +40,5 @@ export const getDividers = (num: number): number[] => range(1, num + 1).filter(i
 export const isPrime = pipe(
     getDividers,
     length,
-    gt(__, 2)
+    equals(1)
 );
