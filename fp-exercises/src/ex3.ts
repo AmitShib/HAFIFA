@@ -54,7 +54,7 @@ returns the maximum value in column col of the table described by str.
 //     return valuesInCol.filter(value => value !== null) as number[];
 //   };
 
-import { __, curry, indexOf, nth, pipe, slice, split, zipObj } from "ramda";
+import { __, curry, indexOf, map, nth, pipe, pluck, prop, propEq, reduce, slice, split, zipObj } from "ramda";
 
 const splitStrToRows = split('\n');
 const getColIndex = (row: string, col: string): number => row.split(',').indexOf(col);
@@ -73,6 +73,7 @@ const makeArr = (str: string, col: string): number[] =>
 // .map(row => toNumber(getColValue(row, getColIndex(splitStrToRows(str)[0], col))))
 
 // export const maxValue = (str: string, col: string): number => Math.max(...makeArr(str, col));
+
 export const maxValue = (str: string, col: string): number => {
   const [headers, ...rows] = str.split('\n');
   const colIndex = headers.split(',').indexOf(col);
@@ -86,3 +87,15 @@ export const maxValue = (str: string, col: string): number => {
     )
   );
 };
+
+const maxValueWithZipObj = (str: string, col: string): number => {
+  const [headers, ...rows] = str.split('\n');
+  const keys = headers.split(",");
+  const colValue = pipe(
+    map(split(',')), // Split each row into an array
+    map(zipObj(keys)), // Create objects with column names as keys
+    map(prop(col)), // Extract the specified column
+    map(parseInt) // Convert values to integers
+  )(rows);
+  return Math.max(...colValue);
+  };
